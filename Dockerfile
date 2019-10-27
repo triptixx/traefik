@@ -1,4 +1,5 @@
-ARG TRAEFIK_VER="2.0.2"
+ARG ALPINE_TAG=3.10
+ARG TRAEFIK_VER=2.0.2
 
 FROM golang:alpine AS builder
 
@@ -15,7 +16,7 @@ RUN apk add --no-cache git upx; \
 
 #=============================================================
 
-FROM loxoo/alpine:3.10
+FROM loxoo/alpine:${ALPINE_TAG}
 
 ARG TRAEFIK_VER
 
