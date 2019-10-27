@@ -15,7 +15,7 @@ RUN apk add --no-cache git upx; \
 
 #=============================================================
 
-FROM alpine:3.10
+FROM scratch
 
 ARG TRAEFIK_VER
 
