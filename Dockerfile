@@ -35,7 +35,7 @@ VOLUME ["/config"]
 EXPOSE 80/TCP 443/TCP 8080/TCP
 
 HEALTHCHECK --start-period=10s --timeout=5s \
-    CMD wget -qO /dev/null 'http://localhost:8080/traefik'
+    CMD /traefik/traefik healthcheck
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 CMD ["/traefik/traefik", "--configfile", "/traefik/traefik.yml"]
