@@ -15,7 +15,7 @@ RUN apk add --no-cache git upx; \
 
 #=============================================================
 
-FROM scratch
+FROM loxoo/alpine:3.10
 
 ARG TRAEFIK_VER
 
