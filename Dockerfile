@@ -14,6 +14,9 @@ RUN apk add --no-cache git upx; \
     go build -ldflags "-s -w" -o /output/traefik/traefik ./cmd/traefik; \
     upx /output/traefik/traefik
 
+COPY *.sh /output/usr/local/bin/
+RUN chmod +x /output/usr/local/bin/*.sh
+
 #=============================================================
 
 FROM loxoo/alpine:${ALPINE_TAG}
@@ -34,4 +37,5 @@ EXPOSE 80/TCP 443/TCP 8080/TCP
 HEALTHCHECK --start-period=10s --timeout=5s \
     CMD /traefik/traefik healthcheck
 
+ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 CMD ["/traefik/traefik", "--configfile", "/config/traefik.yml"]
