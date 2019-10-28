@@ -1,5 +1,18 @@
+#!/bin/sh
+set -eo pipefail
 
-cat > /config/traefik.yml <<EOL
+# ANSI colour escape sequences
+RED='\033[0;31m'
+RESET='\033[0m'
+error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
+
+if [ ! -e /config/traefik.yml ]; then
+
+    if [ -z "$ACME_MAIL" ]; then
+        error "Missing 'ACME_MAIL' arguments required for auto configuration"
+    fi
+
+    cat > /config/traefik.yml <<EOL
 ################################################################
 # Main Section Configuration
 ################################################################
@@ -45,9 +58,7 @@ certificatesResolvers:
     acme:
       email: ${ACME_MAIL}
       storage: /config/acme.json
-      caServer: 'https://acme-staging.api.letsencrypt.org/directory'
-      httpChallenge:
-        entryPoint: http
+      tlsChallenge: {}
 
 ################################################################
 # Web Configuration Backend
@@ -61,3 +72,10 @@ providers:
   docker:
     exposedByDefault: false
 EOL
+
+else
+    if []; then
+        printf -v spc %5s
+        sed -i "/acme:/a\ ${spc}caServer: https://acme-staging.api.letsencrypt.org/directory" /config/traefik.yml
+    fi
+fi
