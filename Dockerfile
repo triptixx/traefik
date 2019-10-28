@@ -34,4 +34,4 @@ EXPOSE 80/TCP 443/TCP 8080/TCP
 HEALTHCHECK --start-period=10s --timeout=5s \
     CMD /traefik/traefik healthcheck
 
-CMD ["/traefik/traefik", "--configfile", "/traefik/traefik.yml"]
+CMD ["/traefik/traefik", "--configfile", "/config/traefik.yml"]
