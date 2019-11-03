@@ -82,7 +82,7 @@ EOL
 fi
 
 if [ "$ACME_TEST" == true ]; then
-    sed -i "/acme:/a\      caServer: https://acme-staging.api.letsencrypt.org/directory" /config/traefik.yml
+    sed -i "/acme:/a\      caServer: https://acme-staging-v02.api.letsencrypt.org/directory" /config/traefik.yml
 else
     sed -i '/\s*caServer:.*/d' /config/traefik.yml
 fi
