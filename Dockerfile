@@ -11,8 +11,7 @@ RUN apk add --no-cache upx; \
     -O traefik.tar.gz; \
     tar xvzf traefik.tar.gz traefik; \
     rm -f traefik.tar.gz; \
-    chmod +x traefik; \
-    upx traefik
+    chmod +x traefik
 
 COPY *.sh /output/usr/local/bin/
 RUN chmod +x /output/usr/local/bin/*.sh
