@@ -1,5 +1,5 @@
 ARG ALPINE_TAG=3.10
-ARG TRAEFIK_VER=2.0.2
+ARG TRAEFIK_VER=2.0.4
 
 FROM golang:alpine AS builder
 
