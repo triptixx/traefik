@@ -10,3 +10,8 @@
 [![Docker Stars](https://img.shields.io/docker/stars/loxoo/traefik.svg)][hub]
 [![Docker Pulls](https://img.shields.io/docker/pulls/loxoo/traefik.svg)][hub]
 [![Build Status](https://github.com/triptixx/traefik/workflows/docker%20build/badge.svg)][actions]
+
+
+$ACME_MAIL
+$ACME_TEST
+$LOG_LEVEL
