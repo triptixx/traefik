@@ -14,20 +14,19 @@ jobs:
       - name: build
         uses: triptixx/action-docker-build@master
         with:
-          repo: knot-dev
-          make: true
+          repo: traefik-dev
       - name: test
         uses: triptixx/action-docker-test@master
         with:
           verbose: true
-          repo: knot-dev
-          run_args: -e DOMAIN=example.com -e NS2=ns2.gandi.net
-          exec_pre: /knot/bin/kdig @127.0.0.1 -p 53 +short +time=1 +retry=0 localhost A
+          repo: traefik-dev
+          run_args: -e ACME_MAIL=${{ secrets.le_mail }} -e ACME_TEST=true
+          exec_pre: 
       - name: publish
         uses: triptixx/action-docker-publish@master
         with:
           docker_username: ${{ secrets.docker_username }}
           docker_password: ${{ secrets.docker_password }}
-          from: knot-dev
-          repo: ${{ secrets.docker_username }}/knot
+          from: traefik-dev
+          repo: ${{ secrets.docker_username }}/traefik
           tags: latest,%label org.label-schema.version | %auto
