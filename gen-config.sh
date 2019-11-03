@@ -35,6 +35,12 @@ entryPoints:
   https:
     address: :443
 
+http:
+  middlewares:
+    redirect:
+      redirectScheme:
+        scheme: https
+
 tls:
   options:
     default:
