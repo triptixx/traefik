@@ -21,7 +21,7 @@ jobs:
           verbose: true
           repo: traefik-dev
           run_args: -e ACME_MAIL=${{ secrets.le_mail }} -e ACME_TEST=true
-          exec_pre: 
+          exec_pre: /traefik/traefik healthcheck
       - name: publish
         uses: triptixx/action-docker-publish@master
         with:
