@@ -73,9 +73,10 @@ providers:
     exposedByDefault: false
 EOL
 
+fi
+
+if [ "$ACME_TEST" == true ]; then
+    sed -i "/acme:/a\      caServer: https://acme-staging.api.letsencrypt.org/directory" /config/traefik.yml
 else
-    if []; then
-        printf -v spc %5s
-        sed -i "/acme:/a\ ${spc}caServer: https://acme-staging.api.letsencrypt.org/directory" /config/traefik.yml
-    fi
+    sed -i '/\s*caServer:.*/d' /config/traefik.yml
 fi
