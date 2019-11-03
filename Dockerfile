@@ -5,12 +5,13 @@ FROM loxoo/alpine:${ALPINE_TAG} AS builder
 
 ARG TRAEFIK_VER
 
-WORKDIR /output/traefik/traefik
+WORKDIR /output/traefik
 RUN apk add --no-cache upx; \
     wget https://github.com/containous/traefik/releases/download/v${TRAEFIK_VER}/traefik_v${TRAEFIK_VER}_linux_amd64.tar.gz \
     -O traefik.tar.gz; \
     tar xvzf traefik.tar.gz traefik; \
     rm -f traefik.tar.gz; \
+    chmod +x traefik; \
     upx traefik
 
 COPY *.sh /output/usr/local/bin/
