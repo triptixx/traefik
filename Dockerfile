@@ -26,7 +26,7 @@ ARG TRAEFIK_VER
 LABEL org.label-schema.name="traefik" \
       org.label-schema.description="A Docker image for the cloud native edge router" \
       org.label-schema.url="https://traefik.io" \
-      org.label-schema.version=${KNOT_VER}
+      org.label-schema.version=${TRAEFIK_VER}
       
 COPY --from=builder /output/ /
 
