@@ -33,12 +33,6 @@ entryPoints:
   https:
     address: :443
 
-http:
-  middlewares:
-    redirect:
-      redirectScheme:
-        scheme: https
-
 tls:
   options:
     default:
@@ -58,7 +52,7 @@ tls:
 # Let's encrypt Configuration
 ################################################################
 certificatesResolvers:
-  default:
+  letsencrypt:
     acme:
       email: ${ACME_MAIL}
       storage: /config/acme.json
@@ -76,12 +70,31 @@ ping: {}
 providers:
   docker:
     exposedByDefault: false
+file:
+    directory: /config/dynamic
+EOL
+
+fi
+
+if [ ! -e /config/dynamic/redirect.yml ]; then
+    if [ ! -d /config/dynamic ];then
+        mkdir -p /config/dynamic
+    fi
+
+    cat > /config/dynamic/redirect.yml <<EOL
+http:
+  middlewares:
+    redirect:
+      redirectScheme:
+        scheme: https
 EOL
 
 fi
 
 if [ "$ACME_TEST" == true ]; then
-    sed -i "/acme:/a\      caServer: https://acme-staging-v02.api.letsencrypt.org/directory" /config/traefik.yml
+    if ! $(grep -iq "caServer" /config/traefik.yml); then
+        sed -i "/acme:/a\      caServer: https://acme-staging-v02.api.letsencrypt.org/directory" /config/traefik.yml
+    fi
 else
     sed -i '/\s*caServer:.*/d' /config/traefik.yml
 fi
