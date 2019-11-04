@@ -21,6 +21,7 @@ RUN chmod +x /output/usr/local/bin/*.sh
 FROM loxoo/alpine:${ALPINE_TAG}
 
 ARG TRAEFIK_VER
+ENV XDG_CONFIG_HOME="/config"
 
 LABEL org.label-schema.name="traefik" \
       org.label-schema.description="A Docker image for the cloud native edge router" \
@@ -36,4 +37,4 @@ EXPOSE 80/TCP 443/TCP 8080/TCP
 #HEALTHCHECK --start-period=10s --timeout=5s \
 #    CMD /traefik/traefik healthcheck
 
-ENTRYPOINT ["/traefik/traefik", "--ping", "--configFile", "/config/traefik.yml"]
+ENTRYPOINT ["/traefik/traefik"]
