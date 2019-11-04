@@ -1,17 +1,16 @@
 ARG ALPINE_TAG=3.10
 ARG TRAEFIK_VER=2.0.4
 
-FROM golang:alpine AS builder
+FROM loxoo/alpine:${ALPINE_TAG} AS builder
 
 ARG TRAEFIK_VER
-    
-RUN apk add --no-cache git upx; \
-    go get -u github.com/containous/go-bindata/...; \
-    go get -d -u github.com/containous/traefik; \
-    cd ${GOPATH}/src/github.com/containous/traefik; \
-    git checkout v${TRAEFIK_VER}; \
-    go generate; \
-    go build -o /output/traefik/traefik ./cmd/traefik
+
+WORKDIR /output/traefik
+RUN apk add --no-cache upx; \
+    wget https://github.com/containous/traefik/releases/download/v${TRAEFIK_VER}/traefik_v${TRAEFIK_VER}_linux_amd64.tar.gz \
+    -O /tmp/traefik.tar.gz; \
+    tar xvzf /tmp/traefik.tar.gz traefik; \
+    chmod +x traefik
 
 COPY *.sh /output/usr/local/bin/
 RUN chmod +x /output/usr/local/bin/*.sh
@@ -21,13 +20,13 @@ RUN chmod +x /output/usr/local/bin/*.sh
 FROM loxoo/alpine:${ALPINE_TAG}
 
 ARG TRAEFIK_VER
-ENV XDG_CONFIG_HOME="/config"
+#ENV XDG_CONFIG_HOME="/config"
 
 LABEL org.label-schema.name="traefik" \
       org.label-schema.description="A Docker image for the cloud native edge router" \
       org.label-schema.url="https://traefik.io" \
       org.label-schema.version=${TRAEFIK_VER}
-      
+
 COPY --from=builder /output/ /
 
 VOLUME ["/config"]
@@ -38,4 +37,4 @@ EXPOSE 80/TCP 443/TCP 8080/TCP
 #    CMD /traefik/traefik healthcheck
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
-CMD ["/traefik/traefik"]
+CMD ["/traefik/traefik", "--configfile", "/config/traefik.yml"]
