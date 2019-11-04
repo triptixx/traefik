@@ -11,7 +11,7 @@ RUN apk add --no-cache git upx; \
     cd ${GOPATH}/src/github.com/containous/traefik; \
     git checkout v${TRAEFIK_VER}; \
     go generate; \
-    go build -ldflags "-s -w" -o /output/traefik/traefik ./cmd/traefik
+    go build -o /output/traefik/traefik ./cmd/traefik
 
 COPY *.sh /output/usr/local/bin/
 RUN chmod +x /output/usr/local/bin/*.sh
