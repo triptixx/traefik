@@ -10,7 +10,8 @@ RUN apk add --no-cache upx; \
     wget https://github.com/containous/traefik/releases/download/v${TRAEFIK_VER}/traefik_v${TRAEFIK_VER}_linux_amd64.tar.gz \
     -O /tmp/traefik.tar.gz; \
     tar xvzf /tmp/traefik.tar.gz traefik; \
-    chmod +x traefik
+    chmod +x traefik; \
+    upx traefik
 
 COPY *.sh /output/usr/local/bin/
 RUN chmod +x /output/usr/local/bin/*.sh
@@ -20,7 +21,7 @@ RUN chmod +x /output/usr/local/bin/*.sh
 FROM loxoo/alpine:${ALPINE_TAG}
 
 ARG TRAEFIK_VER
-#ENV XDG_CONFIG_HOME="/config"
+ENV XDG_CONFIG_HOME="/config"
 
 LABEL org.label-schema.name="traefik" \
       org.label-schema.description="A Docker image for the cloud native edge router" \
@@ -33,8 +34,8 @@ VOLUME ["/config"]
 
 EXPOSE 80/TCP 443/TCP 8080/TCP
 
-#HEALTHCHECK --start-period=10s --timeout=5s \
-#    CMD /traefik/traefik healthcheck
+HEALTHCHECK --start-period=10s --timeout=5s \
+    CMD /traefik/traefik healthcheck
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
-CMD ["/traefik/traefik", "--configfile", "/config/traefik.yml"]
+CMD ["/traefik/traefik"]
