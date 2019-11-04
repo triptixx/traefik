@@ -14,7 +14,8 @@ RUN apk add --no-cache upx; \
     chmod +x traefik
 
 COPY *.sh /output/usr/local/bin/
-RUN chmod +x /output/usr/local/bin/*.sh
+RUN mv /output/traefik/traefik /output/usr/local/bin/; \
+    chmod +x /output/usr/local/bin/*.sh
 
 #=============================================================
 
@@ -39,4 +40,4 @@ EXPOSE 80/TCP 443/TCP 8080/TCP
 #HEALTHCHECK --start-period=10s --timeout=5s \
 #    CMD /traefik/traefik healthcheck
 
-ENTRYPOINT ["/traefik/traefik", "--configfile", "/config/traefik.yml"]
+ENTRYPOINT ["traefik", "--configfile", "/config/traefik.yml"]
