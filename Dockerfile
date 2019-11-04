@@ -1,17 +1,17 @@
 ARG ALPINE_TAG=3.10
 ARG TRAEFIK_VER=2.0.4
 
-FROM loxoo/alpine:${ALPINE_TAG} AS builder
+FROM golang:alpine AS builder
 
 ARG TRAEFIK_VER
-
-WORKDIR /output/traefik
-RUN apk add --no-cache upx; \
-    wget https://github.com/containous/traefik/releases/download/v${TRAEFIK_VER}/traefik_v${TRAEFIK_VER}_linux_amd64.tar.gz \
-    -O traefik.tar.gz; \
-    tar xvzf traefik.tar.gz traefik; \
-    rm -f traefik.tar.gz; \
-    chmod +x traefik
+    
+RUN apk add --no-cache git upx; \
+    go get -u github.com/containous/go-bindata/...; \
+    go get -d -u github.com/containous/traefik; \
+    cd ${GOPATH}/src/github.com/containous/traefik; \
+    git checkout v${TRAEFIK_VER}; \
+    go generate; \
+    go build -ldflags "-s -w" -o /output/traefik/traefik ./cmd/traefik
 
 COPY *.sh /output/usr/local/bin/
 RUN chmod +x /output/usr/local/bin/*.sh
@@ -34,8 +34,8 @@ VOLUME ["/config"]
 
 EXPOSE 80/TCP 443/TCP 8080/TCP
 
-HEALTHCHECK --start-period=10s --timeout=5s \
-    CMD /traefik/traefik healthcheck
+#HEALTHCHECK --start-period=10s --timeout=5s \
+#    CMD /traefik/traefik healthcheck
 
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/entrypoint.sh"]
 CMD ["/traefik/traefik"]
