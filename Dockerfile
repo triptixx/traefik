@@ -36,4 +36,4 @@ EXPOSE 80/TCP 443/TCP 8080/TCP
 #HEALTHCHECK --start-period=10s --timeout=5s \
 #    CMD /traefik/traefik healthcheck
 
-ENTRYPOINT ["/traefik/traefik"]
+ENTRYPOINT ["/traefik/traefik", "--ping", "--configFile", "/config/traefik.yml"]
