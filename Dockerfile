@@ -29,6 +29,9 @@ LABEL org.label-schema.name="traefik" \
       
 COPY --from=builder /output/ /
 
+RUN apk add --no-cache ca-certificates; \
+    update-ca-certificates
+
 VOLUME ["/config"]
 
 EXPOSE 80/TCP 443/TCP 8080/TCP
