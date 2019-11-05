@@ -71,7 +71,7 @@ providers:
   docker:
     endpoint: tcp://srvproxy-socket:2375
     exposedByDefault: false
-file:
+  file:
     directory: /config/dynamic
 EOL
 
