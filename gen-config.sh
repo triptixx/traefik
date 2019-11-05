@@ -69,6 +69,7 @@ ping: {}
 ################################################################
 providers:
   docker:
+    endpoint: tcp://srvproxy-socket:2375
     exposedByDefault: false
 file:
     directory: /config/dynamic
