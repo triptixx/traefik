@@ -71,11 +71,12 @@ ping: {}
 # Docker Configuration Backend
 ################################################################
 providers:
-  docker:
-    endpoint: tcp://srvproxy-socket:2375
-    exposedByDefault: false
   file:
     directory: /config/dynamic
+  docker:
+    endpoint: ${DOCKER_ENDPOINT}
+    exposedByDefault: false
+
 EOL
 
 fi
