@@ -22,7 +22,10 @@ global:
 
 log:
   level: ${LOG_LEVEL:-INFO}
-accessLog: {}
+accessLog:
+  fields:
+    names:
+      StartUTC: drop
 
 ################################################################
 # Entry-points Configuration
