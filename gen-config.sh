@@ -8,8 +8,8 @@ error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 
 if [ ! -e /config/traefik.yml ]; then
 
-    if [ -z "$ACME_MAIL" ]; then
-        error "Missing 'ACME_MAIL' arguments required for auto configuration"
+    if [ \( -z "$ACME_MAIL" \) -o \( -z "$DOCKER_ENDPOINT" \) ]; then
+        error "Missing 'ACME_MAIL' or 'DOCKER_ENDPOINT' arguments required for auto configuration"
     fi
 
     cat > /config/traefik.yml <<EOL
