@@ -7,7 +7,7 @@ RESET='\033[0m'
 error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 
 CONF_TRAEFIK='/config/traefik.yml'
-CONF_DYNAMIC='/config/dynamic/redirect.yml'
+CONF_DYNAMIC='/config/dynamic/defaultdynamic.yml'
 
 if [ ! -e "$CONF_TRAEFIK" ]; then
 
@@ -38,21 +38,6 @@ entryPoints:
     address: :80
   https:
     address: :443
-
-tls:
-  options:
-    default:
-      sniStrict: true
-      minVersion: VersionTLS13
-      cipherSuites:
-        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
-        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
-        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
-        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
-        - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
-        - TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256
 
 ################################################################
 # Let's encrypt Configuration
@@ -118,6 +103,32 @@ http:
     redirect:
       redirectScheme:
         scheme: https
+    defaultHeader:
+      headers:
+        sslRedirect: true
+        stsSeconds: 63072000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        forceSTSHeader: true
+        frameDeny: true
+        contentTypeNosniff: true
+        browserXssFilter: true
+        referrerPolicy: no-referrer
+
+tls:
+  options:
+    defaultTls:
+      sniStrict: true
+      minVersion: VersionTLS13
+      cipherSuites:
+        - TLS_ECDHE_RSA_WITH_CHACHA20_POLY1305
+        - TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305
+        - TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384
+        - TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256
+        - TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256
+        - TLS_ECDHE_ECDSA_WITH_AES_128_CBC_SHA256
 EOL
 
 fi
