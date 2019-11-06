@@ -6,13 +6,16 @@ RED='\033[0;31m'
 RESET='\033[0m'
 error() { >&2 echo -e "${RED}Error: $@${RESET}"; exit 1; }
 
-if [ ! -e /config/traefik.yml ]; then
+CONF_TRAEFIK='/config/traefik.yml'
+CONF_DYNAMIC='/config/dynamic/redirect.yml'
 
-    if [ \( -z "$ACME_MAIL" \) -o \( -z "$DOCKER_ENDPOINT" \) ]; then
-        error "Missing 'ACME_MAIL' or 'DOCKER_ENDPOINT' arguments required for auto configuration"
+if [ ! -e "$CONF_TRAEFIK" ]; then
+
+    if [ -z "$ACME_MAIL" ]; then
+        error "Missing 'ACME_MAIL' arguments required for auto configuration"
     fi
 
-    cat > /config/traefik.yml <<EOL
+    cat > "$CONF_TRAEFIK" <<EOL
 ################################################################
 # Main Section Configuration
 ################################################################
@@ -68,25 +71,48 @@ api: {}
 ping: {}
 
 ################################################################
-# Docker Configuration Backend
+# Configuration Backend
 ################################################################
 providers:
   file:
-    directory: /config/dynamic
-  docker:
-    endpoint: ${DOCKER_ENDPOINT}
-    exposedByDefault: false
-
+    directory: $(dirname $CONF_DYNAMIC)
 EOL
 
 fi
 
-if [ ! -e /config/dynamic/redirect.yml ]; then
-    if [ ! -d /config/dynamic ];then
-        mkdir -p /config/dynamic
+if [ -n "$DOCKER_ENDPOINT" ]; then
+    if [ ! -e "$CONF_TRAEFIK" ]; then
+        error "Missing file $CONF_TRAEFIK required for auto configuration providers Docker"
+    else
+        if [ ! $(awk '/^providers:/' "$CONF_TRAEFIK") ]; then
+            cat >> "$CONF_TRAEFIK" <<EOL
+
+################################################################
+# Docker Configuration Backend
+################################################################
+providers:
+EOL
+        fi
+
+        if [ ! $(awk '/^providers:/{flag=1} flag && /docker:/{print $NF;flag=""}' "$CONF_TRAEFIK") ]; then
+            ENDPOINT="$(cat <<EOL
+  docker:
+    endpoint: ${DOCKER_ENDPOINT}
+    exposedByDefault: false
+EOL
+)"
+            ENDPOINT=$(printf '%s\n' "$ENDPOINT" | sed 's/\\/&&/g;s/^[[:blank:]]/\\&/;s/$/\\/')
+            sed -i -e "/^providers:/a\\${ENDPOINT%?}" "$CONF_TRAEFIK"
+        fi
+    fi
+fi
+
+if [ ! -e "$CONF_DYNAMIC" ]; then
+    if [ ! -d "$(dirname $CONF_DYNAMIC)" ];then
+        mkdir -p "$(dirname $CONF_DYNAMIC)"
     fi
 
-    cat > /config/dynamic/redirect.yml <<EOL
+    cat > "$CONF_DYNAMIC" <<EOL
 http:
   middlewares:
     redirect:
@@ -97,9 +123,9 @@ EOL
 fi
 
 if [ "$ACME_TEST" == true ]; then
-    if ! $(grep -iq "caServer" /config/traefik.yml); then
-        sed -i "/acme:/a\      caServer: https://acme-staging-v02.api.letsencrypt.org/directory" /config/traefik.yml
+    if ! $(grep -iq 'caServer' "$CONF_TRAEFIK"); then
+        sed -i '/acme:/a\      caServer: https://acme-staging-v02.api.letsencrypt.org/directory' "$CONF_TRAEFIK"
     fi
 else
-    sed -i '/\s*caServer:.*/d' /config/traefik.yml
+    sed -i '/\s*caServer:.*/d' "$CONF_TRAEFIK"
 fi
