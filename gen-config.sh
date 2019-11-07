@@ -114,17 +114,8 @@ http:
         browserXssFilter: true
         contentSecurityPolicy: 'upgrade-insecure-requests'
         referrerPolicy: no-referrer
-        featurePolicy:
-          - ambient-light-sensor: 'none'
-          - accelerometer: 'none'
-          - battery: 'none'
-          - camera: 'none'
-          - geolocation: 'none'
-          - gyroscope: 'none'
-          - magnetometer: 'none'
-          - microphone: 'none'
-          - payment: 'none'
-          - usb: 'none'
+        featurePolicy: "ambient-light-sensor 'none'; accelerometer 'none'; battery 'none'; camera 'none'; \
+geolocation 'none'; gyroscope 'none'; magnetometer 'none'; microphone 'none'; payment 'none'; usb 'none';"
 
 tls:
   options:
