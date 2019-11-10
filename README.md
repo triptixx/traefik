@@ -29,18 +29,18 @@ docker run -d \
 
 ## Environment
 
-- `$ACME_MAIL`          - 
-- `$DOCKER_ENDPOINT`    - 
-- `$ACME_TEST`          - 
+- `$ACME_MAIL`          - _required_
+- `$DOCKER_ENDPOINT`    - _required_
+- `$ACME_TEST`          - _optional_
 - `$LOG_LEVEL`          - Logging severity levels. _default: `info`_
 - `$TZ`                 - Timezone. _optional_
 
 ## Volume
 
-- `/acme`               - A data directory for storing zone files, journal database, and timers database.
+- `/acme`               - .
 - `/config`             - Server configuration file location.
 
 ## Network
 
-- `80/tcp`              - Dns port udp.
-- `443/tcp`             - Dns port tcp.
+- `80/tcp`              - Http port tcp.
+- `443/tcp`             - Https port tcp.
