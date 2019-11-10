@@ -29,15 +29,15 @@ docker run -d \
 
 ## Environment
 
-- `$ACME_MAIL`          - _required_
-- `$DOCKER_ENDPOINT`    - _required_
-- `$ACME_TEST`          - _optional_
+- `$ACME_MAIL`          - Email address used for Let's Encrypt registration. _required_
+- `$DOCKER_ENDPOINT`    - Docker server endpoint. Can be a tcp or a unix socket endpoint. _optional_
+- `$ACME_TEST`          - Use Let's Encrypt's staging server. _default: `false`_
 - `$LOG_LEVEL`          - Logging severity levels. _default: `info`_
 - `$TZ`                 - Timezone. _optional_
 
 ## Volume
 
-- `/acme`               - .
+- `/acme`               - The storage option sets the location where your ACME certificates are saved to.
 - `/config`             - Server configuration file location.
 
 ## Network
