@@ -30,7 +30,7 @@ LABEL org.label-schema.name="traefik" \
 
 COPY --from=builder /output/ /
 
-VOLUME ["/config"]
+VOLUME ["/config", "/acme"]
 
 EXPOSE 80/TCP 443/TCP 8080/TCP
 

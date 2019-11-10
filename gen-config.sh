@@ -46,7 +46,7 @@ certificatesResolvers:
   letsencrypt:
     acme:
       email: ${ACME_MAIL}
-      storage: /config/acme.json
+      storage: /acme/acme.json
       tlsChallenge: {}
 
 ################################################################
