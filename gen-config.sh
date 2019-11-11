@@ -94,9 +94,7 @@ EOL
 fi
 
 if [ ! -e "$CONF_DYNAMIC" ]; then
-    if [ ! -d "$(dirname $CONF_DYNAMIC)" ];then
-        mkdir -p "$(dirname $CONF_DYNAMIC)"
-    fi
+    mkdir -p "$(dirname $CONF_DYNAMIC)"
 
     cat > "$CONF_DYNAMIC" <<EOL
 http:
