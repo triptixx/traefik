@@ -7,9 +7,8 @@ ARG TRAEFIK_VER
 
 WORKDIR /output/traefik
 RUN apk add --no-cache upx; \
-    wget https://github.com/containous/traefik/releases/download/v${TRAEFIK_VER}/traefik_v${TRAEFIK_VER}_linux_amd64.tar.gz \
-    -O /tmp/traefik.tar.gz; \
-    tar xvzf /tmp/traefik.tar.gz traefik; \
+    wget -O- https://github.com/containous/traefik/releases/download/v${TRAEFIK_VER}/traefik_v${TRAEFIK_VER}_linux_amd64.tar.gz \
+        | tar xz; \
     chmod +x traefik; \
     upx traefik
 
