@@ -1,15 +1,14 @@
 [hub]: https://hub.docker.com/r/loxoo/traefik
-[mbdg]: https://microbadger.com/images/loxoo/traefik
-[git]: https://github.com/triptixx/traefik
-[actions]: https://github.com/triptixx/traefik/actions
+[git]: https://github.com/triptixx/traefik/tree/master
+[actions]: https://github.com/triptixx/traefik/actions/workflows/main.yml
 
 # [loxoo/traefik][hub]
-[![Layers](https://images.microbadger.com/badges/image/loxoo/traefik.svg)][mbdg]
-[![Latest Version](https://images.microbadger.com/badges/version/loxoo/traefik.svg)][hub]
-[![Git Commit](https://images.microbadger.com/badges/commit/loxoo/traefik.svg)][git]
+[![Git Commit](https://img.shields.io/github/last-commit/triptixx/traefik/master)][git]
+[![Build Status](https://github.com/triptixx/traefik/actions/workflows/main.yml/badge.svg?branch=master)][actions]
+[![Latest Version](https://img.shields.io/docker/v/loxoo/traefik/latest)][hub]
+[![Size](https://img.shields.io/docker/image-size/loxoo/traefik/latest)][hub]
 [![Docker Stars](https://img.shields.io/docker/stars/loxoo/traefik.svg)][hub]
 [![Docker Pulls](https://img.shields.io/docker/pulls/loxoo/traefik.svg)][hub]
-[![Build Status](https://github.com/triptixx/traefik/workflows/docker%20build/badge.svg)][actions]
 
 ## Usage
 
